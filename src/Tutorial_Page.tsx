@@ -1202,7 +1202,7 @@ const handleStepClick = (idx: number) => {
                 </motion.div>
               )}
 
-              <div style={{ maxWidth: isMobile ? '100%' : '650px', marginTop: isMobile ? '0' : '-2.5rem', marginLeft: isMobile ? '0' : '-3rem' }}>
+              <div style={{ maxWidth: isMobile ? '100%' : '650px', marginTop: isMobile ? '0' : '-2.5rem', marginLeft: isMobile ? '0' : '0' }}>
                 <motion.h1
                   initial={{ opacity: 0, x: -40 }} animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94] }}
@@ -1431,7 +1431,7 @@ const handleStepClick = (idx: number) => {
       )}
 
       <div ref={footerRef}>
-        <Footer onNavigate={() => {}} />
+        <Footer/>
       </div>
     </div>
   )
