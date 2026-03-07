@@ -58,7 +58,28 @@ import meeting_details from "./components/assets/tutorial/meeting_details.png";
 import TutorialVideo from './components/assets/TutorialVideo';
 import { Footer } from './components/assets/Footer';
 
-const tutorialSections = [
+interface TutorialStep {
+  number: number;
+  title: string;
+  description: string;
+  icon: React.ComponentType<any>;
+  iconColor: string;
+  image?: string;
+  images?: string[];
+  multiImages?: boolean;
+  details: (string | { message: string; reason: string })[];
+  warning?: { title: string; points: string[] };
+}
+
+interface TutorialSection {
+  sectionId: number;
+  sectionTitle: string;
+  sectionDescription: string;
+  steps: TutorialStep[];
+  sectionColor?: string;
+}
+
+const tutorialSections: TutorialSection[] = [
   {
     sectionId: 1,
     sectionTitle: '1. Sign-In & Account Creation',
@@ -420,7 +441,7 @@ const BRAND = {
 }
  
 
-const ALL_STEPS = tutorialSections.flatMap(s => s.steps)
+const ALL_STEPS : any[] = tutorialSections.flatMap(s => s.steps)
 const TOTAL_STEPS = ALL_STEPS.length
 
 /* ─── ZOOM MODAL ─── */
@@ -529,7 +550,7 @@ const IndexSidebar = ({ activeGlobalIdx, onJump, isOpen, onToggle, isMobile, foo
     const map: Record<number, boolean> = {}
     tutorialSections.forEach(s => { map[s.sectionId] = false })
     const active = tutorialSections.find(s =>
-      s.steps.some(st => ALL_STEPS.findIndex(x => x.number === st.number) === activeGlobalIdx)
+      s.steps.some((st: TutorialStep) => ALL_STEPS.findIndex((x: TutorialStep) => x.number === st.number) === activeGlobalIdx)
     )
     if (active) map[active.sectionId] = true
     return map
@@ -598,10 +619,10 @@ const IndexSidebar = ({ activeGlobalIdx, onJump, isOpen, onToggle, isMobile, foo
           <div style={{ flex: 1, overflowY: 'auto', overflowX: 'hidden', scrollbarWidth: 'none', msOverflowStyle: 'none', padding: '0.5rem 0 1rem' }}>
             <style>{`.sb-sec-btn:hover{background:rgba(6,182,212,0.04)!important}.sb-step-btn:hover{background:rgba(6,182,212,0.05)!important}`}</style>
             {tutorialSections.map((section, secIdx) => {
-              const secFirstIdx = ALL_STEPS.findIndex(s => s.number === section.steps[0].number)
+              const secFirstIdx = ALL_STEPS.findIndex((s: any)=> s.number === section.steps[0].number)
               const isSectionActive = activeGlobalIdx >= secFirstIdx && activeGlobalIdx < secFirstIdx + section.steps.length
               const isExpanded = !!openSections[section.sectionId]
-              const completedInSection = section.steps.filter(st => ALL_STEPS.findIndex(x => x.number === st.number) < activeGlobalIdx).length
+              const completedInSection = section.steps.filter((st: any) => ALL_STEPS.findIndex(x => x.number === st.number) < activeGlobalIdx).length
               const sectionColor = (section as any).sectionColor || BRAND.primary
               return (
                 <div key={section.sectionId} style={{ marginBottom: '2px' }}>
@@ -645,7 +666,7 @@ const IndexSidebar = ({ activeGlobalIdx, onJump, isOpen, onToggle, isMobile, foo
                       >
                         <div style={{ margin: '2px 0.6rem 4px 1.7rem', borderLeft: `1.5px solid ${sectionColor}25` }}>
                           {section.steps.map((step, stepLocalIdx) => {
-                            const stepIdx = ALL_STEPS.findIndex(s => s.number === step.number)
+                            const stepIdx = ALL_STEPS.findIndex((s: any)=> s.number === step.number)
                             const isActive = stepIdx === activeGlobalIdx
                             const isPast = stepIdx < activeGlobalIdx
                             const isLast = stepLocalIdx === section.steps.length - 1
@@ -709,14 +730,13 @@ const IndexSidebar = ({ activeGlobalIdx, onJump, isOpen, onToggle, isMobile, foo
 }
 
 /* ─── STEP CARD ─── */
-interface StepCardProps { step: any; isMobile: boolean; isTablet: boolean; globalIdx: number; canPrev: boolean; canNext: boolean; onPrev: () => void; onNext: () => void; setGlobalIdx: (i: number) => void }
-const StepCard = ({ step, isMobile, isTablet, globalIdx, canPrev, canNext, onPrev, onNext, setGlobalIdx }: StepCardProps) => {
+interface StepCardProps { step: any; isMobile: boolean; isTablet: boolean; globalIdx: number; canPrev: boolean; canNext: boolean; onPrev: () => void; onNext: () => void; setGlobalIdx: (i: number) => void; setIsUserNavigation: (val: boolean) => void }
+const StepCard = ({ step, isMobile, isTablet, globalIdx, canPrev, canNext, onPrev, onNext, setGlobalIdx, setIsUserNavigation }: StepCardProps) => {
   const [showZoom, setShowZoom] = useState(false)
   const [imgLoaded, setImgLoaded] = useState(false)
   const [carouselIdx, setCarouselIdx] = useState(0)
   const [carouselDir, setCarouselDir] = useState(1)
   const Icon = step.icon
-
   const isCarousel = !!step.multiImages && Array.isArray(step.images) && step.images.length > 1
   const carouselImages: string[] = isCarousel ? step.images : []
   const activeImage: string = isCarousel ? carouselImages[carouselIdx] : step.image
@@ -1014,7 +1034,7 @@ const StepCard = ({ step, isMobile, isTablet, globalIdx, canPrev, canNext, onPre
                 {!isMobile && 'Previous'}
               </motion.button>
               <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', overflow: 'hidden' }}>
-                {ALL_STEPS.map((s, i) => {
+                {ALL_STEPS.map((_: TutorialStep, i: number) => {
                   const distance = Math.abs(i - globalIdx)
                   if (distance > 4) return null
                   const isActive = i === globalIdx
@@ -1299,7 +1319,7 @@ const handleStepClick = (idx: number) => {
             </div>
             <div style={{ width: '100%', maxWidth: '1160px' }}>
               <AnimatePresence mode="wait">
-                <StepCard key={globalIdx} step={currentStep} isMobile={isMobile} isTablet={isTablet} globalIdx={globalIdx} canPrev={canPrev} canNext={canNext} onPrev={prev} onNext={next} setGlobalIdx={handleStepClick} />
+                <StepCard key={globalIdx} step={currentStep} isMobile={isMobile} isTablet={isTablet} globalIdx={globalIdx} canPrev={canPrev} canNext={canNext} onPrev={prev} onNext={next} setGlobalIdx={handleStepClick} setIsUserNavigation={setIsUserNavigation}/>
               </AnimatePresence>
             </div>
           </section>
@@ -1324,9 +1344,9 @@ const handleStepClick = (idx: number) => {
                     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '7px', flexShrink: 0 }}>
                       <span style={{ fontSize: '9.5px', fontWeight: 700, letterSpacing: '0.09em', textTransform: 'uppercase', color: BRAND.slate, background: 'rgba(0,0,0,0.05)', border: '1.5px solid rgba(0,0,0,0.09)', padding: '4px 11px', borderRadius: '999px', fontFamily: '"Inter", sans-serif' }}>Section {secIdx + 1}</span>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        <span style={{ fontSize: '10px', color: BRAND.muted, fontFamily: '"Inter", sans-serif' }}>{section.steps.filter(st => ALL_STEPS.findIndex(s => s.number === st.number) < globalIdx).length}/{section.steps.length} done</span>
+                        <span style={{ fontSize: '10px', color: BRAND.muted, fontFamily: '"Inter", sans-serif' }}>{section.steps.filter((st:any) => ALL_STEPS.findIndex(s => s.number === st.number) < globalIdx).length}/{section.steps.length} done</span>
                         <div style={{ width: '80px', height: '5px', background: 'rgba(0,0,0,0.07)', borderRadius: '5px', overflow: 'hidden' }}>
-                          <div style={{ height: '100%', borderRadius: '5px', background: `linear-gradient(to right, ${sectionColor}, ${sectionColor}aa)`, width: `${(section.steps.filter(st => ALL_STEPS.findIndex(s => s.number === st.number) < globalIdx).length / section.steps.length) * 100}%`, transition: 'width 0.4s ease' }} />
+                          <div style={{ height: '100%', borderRadius: '5px', background: `linear-gradient(to right, ${sectionColor}, ${sectionColor}aa)`, width: `${(section.steps.filter((st:any) => ALL_STEPS.findIndex(s => s.number === st.number) < globalIdx).length / section.steps.length) * 100}%`, transition: 'width 0.4s ease' }} />
                         </div>
                       </div>
                     </div>
@@ -1340,7 +1360,7 @@ const handleStepClick = (idx: number) => {
                       const isCurrent = stepGlobalIdx === globalIdx
                       return (
                         <motion.button key={step.number} id={`overview-step-${stepGlobalIdx}`} onClick={() => { handleStepClick(stepGlobalIdx); setViewMode('step') }} initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.3, delay: stepLocalIdx * 0.04, ease: 'easeOut' }} whileHover={{ y: -6, boxShadow: `0 20px 48px ${step.iconColor}28, 0 4px 12px rgba(0,0,0,0.08)`, transition: { duration: 0.18 } }} whileTap={{ scale: 0.985, transition: { duration: 0.1 } }}
-                          style={{ display: 'flex', flexDirection: 'column', borderRadius: '20px', textAlign: 'left', background: isPast ? `linear-gradient(160deg, ${step.iconColor}06, #f8fafc)` : 'white', borderTop: isCurrent ? `2px solid ${step.iconColor}` : isPast ? `1.5px solid ${step.iconColor}22` : `1.5px solid rgba(0,0,0,0.09)`, borderRight: isCurrent ? `2px solid ${step.iconColor}` : isPast ? `1.5px solid ${step.iconColor}22` : `1.5px solid rgba(0,0,0,0.09)`, borderBottom: isCurrent ? `2px solid ${step.iconColor}` : isPast ? `1.5px solid ${step.iconColor}22` : `1.5px solid rgba(0,0,0,0.09)`, borderLeft: `6px solid ${step.iconColor}`, cursor: 'pointer', boxShadow: isCurrent ? `0 8px 32px ${step.iconColor}25, 0 0 0 4px ${step.iconColor}10` : '0 2px 16px rgba(0,0,0,0.07), 0 1px 4px rgba(0,0,0,0.₀₉)', transition: 'border-color ₀.₂s ease, box-shadow ₀.₂s ease', minHeight: isMobile ? 'auto' : '24₀px' }}
+                          style={{ display: 'flex', flexDirection: 'column', borderRadius: '20px', textAlign: 'left', background: isPast ? `linear-gradient(160deg, ${step.iconColor}06, #f8fafc)` : 'white', borderTop: isCurrent ? `2px solid ${step.iconColor}` : isPast ? `1.5px solid ${step.iconColor}22` : `1.5px solid rgba(0,0,0,0.09)`, borderRight: isCurrent ? `2px solid ${step.iconColor}` : isPast ? `1.5px solid ${step.iconColor}22` : `1.5px solid rgba(0,0,0,0.09)`, borderBottom: isCurrent ? `2px solid ${step.iconColor}` : isPast ? `1.5px solid ${step.iconColor}22` : `1.5px solid rgba(0,0,0,0.09)`, borderLeft: `6px solid ${step.iconColor}`, cursor: 'pointer', boxShadow: isCurrent ? `0 8px 32px ${step.iconColor}25, 0 0 0 4px ${step.iconColor}10` : '0 2px 16px rgba(0,0,0,0.07), 0 1px 4px rgba(0,0,0,0.09)', transition: 'border-color 0.2s ease, box-shadow 0.2s ease', minHeight: isMobile ? 'auto' : '240px' }}
                         >
                           <div style={{ padding: isMobile ? '1.5rem 1.5rem 1.5rem 1.25rem' : '1.75rem 1.75rem 1.75rem 1.5rem', display: 'flex', flexDirection: 'column', gap: '1rem', flex: 1 }}>
                             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
