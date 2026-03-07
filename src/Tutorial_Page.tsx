@@ -5,8 +5,6 @@ import {
   Settings,
   Shield,
   CreditCard,
-  Play,
-  ExternalLink,
   ArrowRight,
   CheckCircle,
   MapPin,
@@ -18,23 +16,18 @@ import {
   UserCircle,
   Route,
   Activity,
-  ChevronDown,
-  ChevronUp,
   ChevronLeft,
   ChevronRight,
   ArrowUp,
   ArrowDown,
   ArrowLeft,
-  Sparkles,
-  Zap,
   Grid3X3, 
   List,
   ZoomIn,
-  Eye,
   X,
-  Info
+
 } from 'lucide-react';
-import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 
 import logoImage from "./components/assets/geotrack.png";
 
@@ -425,6 +418,7 @@ const BRAND = {
   amber:     '#F59E0B',
   border:    'rgba(6,182,212,0.18)',
 }
+ 
 
 const ALL_STEPS = tutorialSections.flatMap(s => s.steps)
 const TOTAL_STEPS = ALL_STEPS.length
