@@ -55,8 +55,8 @@ import multi_leg_trip_2 from "./components/assets/tutorial/multi_leg_trip_2.png"
 import multi_leg_trip_3 from "./components/assets/tutorial/multi_leg_trip_3.png";
 import meeting_details from "./components/assets/tutorial/meeting_details.png";
 
-import TutorialVideo from './components/assets/TutorialVideo';
-import { Footer } from './components/assets/Footer';
+import TutorialVideo from './components/TutorialVideo';
+import { Footer } from './components/Footer';
 
 interface TutorialStep {
   number: number;
@@ -1431,7 +1431,7 @@ const handleStepClick = (idx: number) => {
       )}
 
       <div ref={footerRef}>
-        <Footer />
+        <Footer onNavigate={() => {}} />
       </div>
     </div>
   )
