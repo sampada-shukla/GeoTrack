@@ -542,7 +542,7 @@ const ZoomModal = ({ show, onClose, step, isMobile }: ZoomModalProps) => {
 }
 
 /* ─── INDEX SIDEBAR ─── */
-interface IndexSidebarProps { activeGlobalIdx: number; onJump: (idx: number) => void; isOpen: boolean; onToggle: () => void; isMobile: boolean; footerOffset: number }
+interface IndexSidebarProps { activeGlobalIdx: number; onJump: (idx: number) => void; isMobile: boolean; isOpen: boolean; onToggle: () => void; footerOffset: number }
 const IndexSidebar = ({ activeGlobalIdx, onJump, isOpen, onToggle, isMobile, footerOffset }: IndexSidebarProps) => {
   const SIDEBAR_W = 272
 
@@ -1207,7 +1207,7 @@ const handleStepClick = (idx: number) => {
   return (
     <div style={{ minHeight: '100vh', fontFamily: '"Inter", sans-serif', background: 'linear-gradient(180deg, #ecfeff 0%, #f8fafc 30%, #ffffff 100%)', position: 'relative', width: '100%', overflowX: 'hidden' }}>
 
-      <IndexSidebar activeGlobalIdx={globalIdx} onJump={handleStepClick} isOpen={sidebarOpen} onToggle={() => setSidebarOpen(o => !o)} isMobile={isMobile} footerOffset={footerOffset} />
+      <IndexSidebar activeGlobalIdx={globalIdx} onJump={handleStepClick} isOpen={sidebarOpen} onToggle={() => setSidebarOpen(o => !o)} footerOffset={footerOffset} />
 
       <motion.div animate={{ marginLeft: (!isMobile && sidebarOpen) ? 272 : 0 }} transition={{ type: 'spring', stiffness: 340, damping: 34 }}>
 
