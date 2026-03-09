@@ -542,8 +542,8 @@ const ZoomModal = ({ show, onClose, step, isMobile }: ZoomModalProps) => {
 }
 
 /* ─── INDEX SIDEBAR ─── */
-interface IndexSidebarProps { activeGlobalIdx: number; onJump: (idx: number) => void; isMobile: boolean; isOpen: boolean; onToggle: () => void; footerOffset: number }
-const IndexSidebar = ({ activeGlobalIdx, onJump, isOpen, onToggle, isMobile, footerOffset }: IndexSidebarProps) => {
+interface IndexSidebarProps { activeGlobalIdx: number; onJump: (idx: number) => void; isMobile?: boolean; isOpen: boolean; onToggle: () => void; footerOffset: number }
+const IndexSidebar = ({ activeGlobalIdx, onJump, isOpen, onToggle, footerOffset }: IndexSidebarProps) => {
   const SIDEBAR_W = 272
 
   const [openSections, setOpenSections] = useState<Record<number, boolean>>(() => {
