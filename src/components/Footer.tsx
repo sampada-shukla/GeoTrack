@@ -1,5 +1,4 @@
-import { Mail, Phone, MapPin, Facebook, Twitter, Linkedin, Instagram } from "lucide-react";
-import geotrack from "./geotrack.png";
+
 interface FooterProps {
   onNavigate?: (page: 'privacy' | 'terms' | 'cookies' | 'security') => void;
 }
